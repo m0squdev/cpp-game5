@@ -112,11 +112,25 @@ void Prog::BindUniform(GLchar* name)
     }
 }
 
+void Prog::SetUniform(GLchar* name, GLint value)
+{
+    Prog::BindUniform(name);
+    if (currentUniformLocation != -1)
+        glUniform1i(currentUniformLocation, value);
+}
+
 void Prog::SetUniform(GLchar* name, GLfloat value)
 {
     Prog::BindUniform(name);
     if (currentUniformLocation != -1)
         glUniform1f(currentUniformLocation, value);
+}
+
+void Prog::SetUniform(GLchar* name, glm::vec3 value)
+{
+    Prog::BindUniform(name);
+    if (currentUniformLocation != -1)
+        glUniform3f(currentUniformLocation, value.x, value.y, value.z);
 }
 
 void Prog::SetUniform(GLchar* name, glm::mat4 value)
@@ -131,6 +145,7 @@ void Prog::UpdateModel()
     Prog::SetUniform("modelMat", modelMat);
     modelMat = glm::mat4(1.f);
 }
+
 glm::mat4 Prog::TranslateModel(float x, float y, float z)
 {
     modelMat = glm::translate(modelMat, glm::vec3(x, y, z));
@@ -151,16 +166,11 @@ glm::mat4 Prog::ScaleModel(float x, float y, float z)
     return modelMat;
 }
 
-void Prog::UpdateProjection()
-{
-    Prog::SetUniform("projectionMat", projectionMat);
-    projectionMat = glm::mat4(1.f);
-}
-
-glm::mat4 Prog::AddPerspectiveProjection(int width, int height, float near, float far, float fov)
+void Prog::SetProjection(int width, int height, float near, float far, float fov)
 {
     projectionMat = glm::perspective(fov, (float)width / (float)height, near, far);
-    return projectionMat;
+    Prog::SetUniform("projectionMat", projectionMat);
+    projectionMat = glm::mat4(1.f);
 }
 
 void Prog::UpdateView()

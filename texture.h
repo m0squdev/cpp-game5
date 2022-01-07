@@ -17,7 +17,7 @@ class Texture
         static void Bind(GLuint texture = currentTexture);
         static void Unbind();
 
-        static void AttachToProg(GLuint texture = currentTexture, GLuint prog = Prog::GetCurrentProg());
+        static void SetUniform(GLuint texture = currentTexture);
     
     private:
         static GLuint currentTexture;

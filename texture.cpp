@@ -64,9 +64,9 @@ void Texture::Unbind()
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::AttachToProg(GLuint texture, GLuint prog)
+void Texture::SetUniform(GLuint texture)
 {
     glActiveTexture(GL_TEXTURE0);
     Texture::Bind(texture);
-    glUniform1i(glGetUniformLocation(prog, "textureSlot"), GL_TEXTURE0);
+    Prog::SetUniform("textureSlot", GL_TEXTURE0);
 }

@@ -2,6 +2,7 @@
 
 #include "mesh.h"
 #include "texture.h"
+#include "light.h"
 #include "listener.h"
 
 class Window

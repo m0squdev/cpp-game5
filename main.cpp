@@ -16,6 +16,7 @@ GLuint indices[] = {
     0, 1, 2
 };
 GLuint brickTexture, southAfricaTexture;
+float light = 0.f;
 
 void loop()
 {
@@ -36,15 +37,20 @@ void loop()
     Mesh::BindWithProg();
     // Render
     Prog::UpdateView();
+    if (light < 1.f)
+    {
+        light += .01f;
+        Light::SetAmbient(light);
+    }
     for (int y = -1; y <= 0; y++)
     {
         switch (y)
         {
         case -1:
-            Texture::AttachToProg(brickTexture);
+            Texture::SetUniform(brickTexture);
             break;
         case 0:
-            Texture::AttachToProg(southAfricaTexture);
+            Texture::SetUniform(southAfricaTexture);
             break;
         }
         Prog::TranslateModel(0.f, y, 0.f);
@@ -77,7 +83,7 @@ int main()
     Window::Enable3D();
     Window::DisableCursor();
     // Create the camera
-    Camera::Create(1.f, 1.f); // 1.f, 5.f
+    Camera::Create(1.f, 1.f);
     // Create the shape
     Mesh::CreateWithProgFromShaderFiles(indices, sizeof(indices), vertices, sizeof(vertices), "res/shaders/Vertex.glsl", "res/shaders/Fragment.glsl");
     info("Prog:", false);
@@ -88,10 +94,10 @@ int main()
     info(Mesh::GetCurrentVbo());
     info("Ibo:", false);
     info(Mesh::GetCurrentIbo());
-    Prog::AddPerspectiveProjection(bufferWidth, bufferHeight, .1f, 100.f);
-    Prog::UpdateProjection();
+    Prog::SetProjection(bufferWidth, bufferHeight, .1f, 100.f);
     brickTexture = Texture::Create("res/textures/bricks.png");
     southAfricaTexture = Texture::Create("res/textures/southafrica.jpg");
+    Light::SetAmbient(light, 1.f, 1.f, 1.f);
     Mesh::UnbindWithProg();
     // Main loop
     Window::SetLoop(&loop);

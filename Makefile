@@ -54,7 +54,7 @@ build:
 run:
 	./$(out-file)
 
-# make clean-obj: removes the .o file created by the functions build_<cpp file> and obj
+# make clean-obj: removes the .o file created by the functions obj and obj-*
 clean-obj:
 	rm -r $(obj-dir)
 # make clean-out: removes the executable file created by the function build

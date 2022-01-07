@@ -1,6 +1,6 @@
 #include "texture.h"
 
-#include "lib/stb_image/stb_image.h"
+//#include "lib/stb_image/stb_image.h"
 
 GLuint Texture::currentTexture;
 int Texture::currentWidth, Texture::currentHeight, Texture::currentBitDepth;
@@ -17,8 +17,8 @@ void Texture::Init()
 
 GLuint Texture::Create(char* path)
 {
-    //unsigned char* image = SOIL_load_image(path, &currentWidth, &currentHeight, 0, SOIL_LOAD_RGBA);
-    unsigned char* image = stbi_load(path, &currentWidth, &currentHeight, &currentBitDepth, STBI_rgb_alpha);
+    unsigned char* image = SOIL_load_image(path, &currentWidth, &currentHeight, 0, SOIL_LOAD_RGBA);
+    //unsigned char* image = stbi_load(path, &currentWidth, &currentHeight, &currentBitDepth, STBI_rgb_alpha);
     if (!image)
     {
         /*warn("Can't load texture number ", false);
@@ -33,8 +33,8 @@ GLuint Texture::Create(char* path)
     glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, currentWidth, currentHeight, 0, GL_RGBA, GL_UNSIGNED_BYTE, image);
     glGenerateMipmap(GL_TEXTURE_2D);
     Texture::Unbind();
-    //SOIL_free_image_data(image);
-    stbi_image_free(image);
+    SOIL_free_image_data(image);
+    //stbi_image_free(image);
     return currentTexture;
 }
 
@@ -66,7 +66,6 @@ void Texture::Unbind()
 
 void Texture::AttachToProg(GLuint texture, GLuint prog)
 {
-    //prog = currentProg;
     glActiveTexture(GL_TEXTURE0);
     Texture::Bind(texture);
     glUniform1i(glGetUniformLocation(prog, "textureSlot"), GL_TEXTURE0);

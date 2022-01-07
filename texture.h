@@ -1,6 +1,6 @@
 #pragma once
 
-//#include "lib/soil/SOIL2.h"
+#include "lib/soil/SOIL2.h"
 #include "program.h"
 
 class Texture

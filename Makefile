@@ -5,6 +5,7 @@ lib-dir = lib
 lib-soil-dir = $(lib-dir)/soil
 lib-stb-image-dir = $(lib-dir)/stb_image
 obj-dir = obj
+out-file = out
 
 # make: executes functions build, run and clear
 output: obj build run
@@ -41,25 +42,25 @@ obj-game: log.cpp camera.cpp shader.cpp program.cpp mesh.cpp texture.cpp listene
 obj-main: main.cpp
 	gcc -c main.cpp -o $(obj-dir)/main.o
 # make obj: calls all the obj-* functions
-obj: obj-lib-stb-image obj-game obj-main
+obj: obj-lib-soil obj-game obj-main
 
 # make build: converts all the .cpp files to .o files and compiles them with all the modules included
 build:
-	gcc $(obj-dir)/* -ldl -lstdc++ -lGL -lGLEW -lglfw -lm -o output
+	gcc $(obj-dir)/* -ldl -lstdc++ -lGL -lGLEW -lglfw -lm -o $(out-file)
 #	gcc lib/stb_image/stb_image.o *.o -ldl -lstdc++ -lGL -lGLEW -lglfw -lm -o output
 
 # make run: runs the executable file created by the function build
 run:
-	./output
+	./$(out-file)
 
 # make clean-obj: removes the .o file created by the functions build_<cpp file> and obj
 clean-obj:
-	rm *.o
-# make clean-output: removes the executable file created by the function build
-clean-output:
-	rm output
+	rm -r $(obj-dir)
+# make clean-out: removes the executable file created by the function build
+clean-out:
+	rm $(out-file)
 # make clean: removes the files created by the functions build_<cpp file>, obj and build
-clean: clean-obj clean-output
+clean: clean-obj clean-out
 
 # make git-init: makes the directory a git repository
 git-init:

@@ -1,11 +1,5 @@
 #define STB_IMAGE_IMPLEMENTATION
-
-//#include "log.h"
 #include "window.h"
-//#include "program.h"
-//#include "camera.h"
-//#include "texture.h"
-//#include "vao.h"
 
 bool fullscreen = false;
 GLfloat vertices[] = {
@@ -29,20 +23,15 @@ void loop()
     Window::SetBgColor(0.f, 0.f, 0.f);
     // Clear the color and the depth buffers
     Window::ResetBuffers();
-    // Listen for keys
-    if (Window::GetKeyPress(KEY_ESCAPE))
+    // key and mouse listener
+    if (Listener::GetKeyPress(KEY_ESCAPE))
         Window::ExitLoop();
-    else if (Window::GetKeyPress(KEY_F11))
+    else if (Listener::GetKeyPress(KEY_F11))
     {
         fullscreen = !fullscreen;
         Window::SetFullscreen(fullscreen);
     }
-    Window::FirstPersonListener();
-    // Get the mouse position and movement
-    float mouseX = Window::GetMouseX();
-    float mouseY = Window::GetMouseY();
-    float mouseXMovement = Window::GetMouseXMovement();
-    float mouseYMovement = Window::GetMouseYMovement();
+    Listener::FirstPersonListener();
     // Bind
     Mesh::BindWithProg();
     // Render

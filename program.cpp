@@ -175,6 +175,5 @@ void Prog::SetProjection(int width, int height, float near, float far, float fov
 
 void Prog::UpdateView()
 {
-    Camera::Update();
     Prog::SetUniform("viewMat", Camera::GetView());
 }

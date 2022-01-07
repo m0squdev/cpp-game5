@@ -2,7 +2,7 @@
 
 bool Listener::keys[];
 bool Listener::mouseMoved = false;
-float Listener::mouseX, Listener::mouseY, Listener::mouseXMovement, Listener::mouseYMovement, Listener::deltaTime;
+float Listener::mouseX, Listener::mouseY, Listener::mouseXMovement, Listener::mouseYMovement;
 
 void Listener::Init()
 {
@@ -26,25 +26,20 @@ bool Listener::GetKeyPress(int key)
         ThrowErr::UnknownKey("Window::GetKeyPress");
 }
 
-void Listener::SetDeltaTime(float value)
-{
-    deltaTime = value;
-}
-
 void Listener::FirstPersonListener()
 {
     if (Listener::GetKeyPress(KEY_A))
-        Camera::GoLeft(deltaTime);
+        Camera::GoLeft();
     if (Listener::GetKeyPress(KEY_D))
-        Camera::GoRight(deltaTime);
+        Camera::GoRight();
     if (Listener::GetKeyPress(KEY_LEFT_SHIFT))
-        Camera::GoDown(deltaTime);
+        Camera::GoDown();
     if (Listener::GetKeyPress(KEY_SPACE))
-        Camera::GoUp(deltaTime);
+        Camera::GoUp();
     if (Listener::GetKeyPress(KEY_S))
-        Camera::GoBackward(deltaTime);
+        Camera::GoBackward();
     if (Listener::GetKeyPress(KEY_W))
-        Camera::GoForward(deltaTime);
+        Camera::GoForward();
     float mouseXMovement = Listener::GetMouseXMovement();
     float mouseYMovement = Listener::GetMouseYMovement();
     mouseXMovement *= Camera::GetTurnSpeed();

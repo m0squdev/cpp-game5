@@ -30,13 +30,13 @@ class Window
         static void EnableCursor();
         static void DisableCursor();
 
-        static void ResetBuffers();
-
-        static void Update();
         static float GetDeltaTime();
 
     private:
         static GLFWwindow* currentWindow;
         static int currentBufferWidth, currentBufferHeight;
         static float deltaTime, lastTime;
+
+        static void ResetBuffers();
+        static void Update();
 };

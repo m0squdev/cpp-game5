@@ -1,8 +1,9 @@
 #include "camera.h"
 
 glm::vec3 Camera::pos, Camera::front, Camera::right, Camera::up, Camera::worldUp;
-GLfloat Camera::yaw, Camera::pitch, Camera::movementSpeed, Camera::turnSpeed;
+GLfloat Camera::yaw, Camera::yawSin, Camera::yawCos, Camera::pitch, Camera::pitchSin, Camera::pitchCos, Camera::movementSpeed, Camera::turnSpeed, Camera::frontXMovement, Camera::frontZMovement;
 GLfloat Camera::maxPitch = 89.f;
+glm::vec3 Camera::rightMovement, Camera::upMovement;
 
 void Camera::Create(GLfloat startMovementSpeed, GLfloat startTurnSpeed, glm::vec3 startPos, glm::vec3 startUp, GLfloat startYaw, GLfloat startPitch)
 {
@@ -13,7 +14,7 @@ void Camera::Create(GLfloat startMovementSpeed, GLfloat startTurnSpeed, glm::vec
     front = glm::vec3(0.f, 0.f, -1.f);
     movementSpeed = startMovementSpeed;
     turnSpeed = startTurnSpeed;
-    Camera::Update();
+    //Camera::Update();
 }
 
 GLfloat Camera::GetYaw()
@@ -46,46 +47,63 @@ glm::mat4 Camera::GetView()
     return glm::lookAt(pos, pos + front, up);
 }
 
-void Camera::GoLeft(float deltaTime)
+void Camera::GoRight()
 {
-    pos -= right * (movementSpeed * deltaTime);
+    pos += rightMovement;
 }
 
-void Camera::GoRight(float deltaTime)
+void Camera::GoLeft()
 {
-    pos += right * (movementSpeed * deltaTime);
+    pos -= rightMovement;
 }
 
-void Camera::GoDown(float deltaTime)
+void Camera::GoDown()
 {
-    pos -= worldUp * (movementSpeed * deltaTime);
+    //pos -= worldUp * (movementSpeed * deltaTime);
+    pos -= upMovement;
 }
 
-void Camera::GoUp(float deltaTime)
+void Camera::GoUp()
 {
-    pos += worldUp * (movementSpeed * deltaTime);
+    //pos += worldUp * (movementSpeed * deltaTime);
+    pos += upMovement;
 }
 
-void Camera::GoBackward(float deltaTime)
+void Camera::GoBackward()
 {
-    pos -= front * (movementSpeed * deltaTime);
+    //pos -= glm::vec3(front.x, 0.f, front.z) * (movementSpeed * deltaTime);
+    pos.x -= frontXMovement;
+    pos.z -= frontZMovement;
 }
 
-void Camera::GoForward(float deltaTime)
+#include "log.h"
+
+void Camera::GoForward()
 {
-    pos += front * (movementSpeed * deltaTime);
+    //pos += glm::vec3(front.x, 0.f, front.z) * (movementSpeed * deltaTime);
+    pos.x += frontXMovement;
+    pos.z += frontZMovement;
+
 }
 
-void Camera::Update()
+void Camera::Update(float deltaTime)
 {
-    front.x = cos(glm::radians(yaw)) * cos(glm::radians(pitch));
-    front.y = sin(glm::radians(pitch));
-    front.z = sin(glm::radians(yaw)) * cos(glm::radians(pitch));
-    front = glm::normalize(front);
-    right = glm::normalize(glm::cross(front, worldUp));
-    up = glm::normalize(glm::cross(right, front));
     if (pitch > maxPitch)
         pitch = maxPitch;
     else if (pitch < -maxPitch)
         pitch = -maxPitch;
+    yawSin = sin(glm::radians(yaw));
+    yawCos = cos(glm::radians(yaw));
+    pitchSin = sin(glm::radians(pitch));
+    pitchCos = cos(glm::radians(pitch));
+    front.x = yawCos * pitchCos;
+    front.y = pitchSin;
+    front.z = yawSin * pitchCos;
+    front = glm::normalize(front);
+    right = glm::normalize(glm::cross(front, worldUp));
+    up = glm::normalize(glm::cross(right, front));
+    frontXMovement = yawCos * (movementSpeed * deltaTime);
+    frontZMovement = yawSin * (movementSpeed * deltaTime);
+    rightMovement = right * (movementSpeed * deltaTime);
+    upMovement = worldUp * (movementSpeed * deltaTime);
 }

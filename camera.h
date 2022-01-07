@@ -19,16 +19,17 @@ class Camera
         static GLfloat GetTurnSpeed();
         static glm::mat4 GetView();
 
-        static void GoLeft(float deltaTime);
-        static void GoRight(float deltaTime);
-        static void GoDown(float deltaTime);
-        static void GoUp(float deltaTime);
-        static void GoBackward(float deltaTime);
-        static void GoForward(float deltaTime);
+        static void GoRight();
+        static void GoLeft();
+        static void GoDown();
+        static void GoUp();
+        static void GoBackward();
+        static void GoForward();
         
-        static void Update();
+        static void Update(float deltaTime);
 
     private:
         static glm::vec3 pos, front, right, up, worldUp;
-        static GLfloat yaw, pitch, maxPitch, movementSpeed, turnSpeed;
+        static GLfloat yaw, yawSin, yawCos, pitch, pitchSin, pitchCos, maxPitch, movementSpeed, turnSpeed, frontXMovement, frontZMovement;
+        static glm::vec3 rightMovement, upMovement;
 };

@@ -22,7 +22,7 @@ void loop()
     // Set the background color
     Window::SetBgColor(0.f, 0.f, 0.f);
     // Clear the color and the depth buffers
-    Window::ResetBuffers();
+    //Window::ResetBuffers();
     // key and mouse listener
     if (Listener::GetKeyPress(KEY_ESCAPE))
         Window::ExitLoop();
@@ -59,8 +59,6 @@ void loop()
     }
     // Unbind
     Mesh::UnbindWithProg();
-    // Update the window, the events and the camera matrix
-    Window::Update();
 }
 
 int main()

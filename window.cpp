@@ -82,7 +82,10 @@ void Window::SetLoop(void (*func)())
 {
     while (!glfwWindowShouldClose(currentWindow))
     {
+        Window::ResetBuffers();
+        Camera::Update(deltaTime);
         func();
+        Window::Update();
     }
 }
 
@@ -114,6 +117,11 @@ void Window::DisableCursor()
     glfwSetInputMode(currentWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
+float Window::GetDeltaTime()
+{
+    return deltaTime;
+}
+
 void Window::ResetBuffers()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -128,13 +136,7 @@ void Window::Update()
         float now = glfwGetTime();
         deltaTime = now - lastTime;
         lastTime = now;
-        Listener::SetDeltaTime(deltaTime);
     }
     else
         ThrowErr::UndefinedWindow("Window::Update");
-}
-
-float Window::GetDeltaTime()
-{
-    return deltaTime;
 }

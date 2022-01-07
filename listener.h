@@ -141,15 +141,12 @@ class Listener
         static GLfloat GetMouseXMovement();
         static GLfloat GetMouseYMovement();
 
-        static void SetDeltaTime(float value);
-
         static void FirstPersonListener();
     
     private:
         static bool keys[KEY_LAST - KEY_SPACE];
         static bool mouseMoved;
         static float mouseX, mouseY, mouseXMovement, mouseYMovement;
-        static float deltaTime;
 
         static void KeyListener(GLFWwindow* window, int key, int code, int action, int mode);
         static void MouseListener(GLFWwindow* window, double xPos, double yPos);

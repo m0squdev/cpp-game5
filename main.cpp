@@ -1,4 +1,3 @@
-//#define STB_IMAGE_IMPLEMENTATION
 #include "window.h"
 
 bool fullscreen = false;

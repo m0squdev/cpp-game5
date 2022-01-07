@@ -3,7 +3,7 @@
 #include "camera.h"
 #include "log.h"
 
-#include <GLFW/glfw3.h> // GLFW must be included after GLEW (included in camera.h)
+#include <GLFW/glfw3.h> // GLFW must be included after GLEW (included by camera.h)
 
 #define KEY_SPACE            GLFW_KEY_SPACE
 #define KEY_APOSTROPHE       GLFW_KEY_APOSTROPHE

@@ -8,14 +8,16 @@
 class Window
 {
     public:
-        static void Init(int vMajor = 3, int vMinor = 3, int profile = GLFW_OPENGL_CORE_PROFILE, bool forwardCompatible = GLFW_TRUE);
-        static void InitLib(int vMajor = 3, int vMinor = 3, int profile = GLFW_OPENGL_CORE_PROFILE, bool forwardCompatible = GLFW_TRUE);
+        static void Init(int vMajor = 3, int vMinor = 3, int profile = GLFW_OPENGL_CORE_PROFILE, bool forwardCompatible = GLFW_TRUE, int fps = 60);
+        static void InitLib(int vMajor = 3, int vMinor = 3, int profile = GLFW_OPENGL_CORE_PROFILE, bool forwardCompatible = GLFW_TRUE, int fps = 60);
 
         static GLFWwindow* Create(char* title, int width, int height, bool fullscreen = false);
         static void Delete();
 
         static int GetBufferWidth();
         static int GetBufferHeight();
+        static void SetBufferWidth(int value);
+        static void SetBufferHeight(int value);
 
         static void Bind(GLFWwindow* window = currentWindow);
 
@@ -34,8 +36,10 @@ class Window
 
     private:
         static GLFWwindow* currentWindow;
-        static int currentBufferWidth, currentBufferHeight;
+        static int currentBufferWidth, currentBufferHeight, lastWindowedBufferWidth, lastWindowedBufferHeight;
         static float deltaTime, lastTime;
+
+        static void UpdateBufferSize();
 
         static void ResetBuffers();
         static void Update();

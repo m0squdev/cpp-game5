@@ -3,20 +3,24 @@
 GLFWwindow* Window::currentWindow = NULL;
 int Window::currentBufferWidth = NULL;
 int Window::currentBufferHeight = NULL;
+int Window::lastWindowedBufferWidth = NULL;
+int Window::lastWindowedBufferHeight = NULL;
 float Window::deltaTime = 0.f;
 float Window::lastTime = 0.f;
 
-void Window::Init(int vMajor, int vMinor, int profile, bool forwardCompatible)
+void Window::Init(int vMajor, int vMinor, int profile, bool forwardCompatible, int fps)
 {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, vMajor);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, vMinor);
     glfwWindowHint(GLFW_OPENGL_PROFILE, profile);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, forwardCompatible);
+    glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
+    glfwWindowHint(GLFW_REFRESH_RATE, fps);
 }
 
-void Window::InitLib(int vMajor, int vMinor, int profile, bool forwardCompatible)
+void Window::InitLib(int vMajor, int vMinor, int profile, bool forwardCompatible, int fps)
 {
-    Window::Init(vMajor, vMinor, profile, forwardCompatible);
+    Window::Init(vMajor, vMinor, profile, forwardCompatible, fps);
     Listener::Init();
     Texture::Init();
 }
@@ -61,10 +65,20 @@ int Window::GetBufferHeight()
         ThrowErr::UndefinedWindow("Window::GetBufferHeight");
 }
 
+void Window::SetBufferWidth(int value)
+{
+    currentBufferWidth = value;
+}
+
+void Window::SetBufferHeight(int value)
+{
+    currentBufferHeight = value;
+}
+
 void Window::Bind(GLFWwindow* window)
 {
     currentWindow = window;
-    glfwGetFramebufferSize(currentWindow, &currentBufferWidth, &currentBufferHeight);
+    Window::UpdateBufferSize();
     glfwMakeContextCurrent(currentWindow);
 }
 
@@ -75,7 +89,21 @@ void Window::SetViewport(GLint xStart, GLint xLength, GLint yStart, GLint yLengt
 
 void Window::SetFullscreen(bool fullscreen)
 {
+    if (fullscreen)
+    {
+        lastWindowedBufferWidth = currentBufferWidth;
+        lastWindowedBufferHeight = currentBufferHeight;
+        const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+        currentBufferWidth = mode->width;
+        currentBufferHeight = mode->height;
+    }
+    else
+    {
+        currentBufferWidth = lastWindowedBufferWidth;
+        currentBufferHeight = lastWindowedBufferHeight;
+    }
     glfwSetWindowMonitor(currentWindow, fullscreen ? glfwGetPrimaryMonitor() : NULL, 0, 0, currentBufferWidth, currentBufferHeight, GLFW_DONT_CARE);
+    Window::SetViewport();
 }
 
 void Window::SetLoop(void (*func)())
@@ -120,6 +148,11 @@ void Window::DisableCursor()
 float Window::GetDeltaTime()
 {
     return deltaTime;
+}
+
+void Window::UpdateBufferSize()
+{
+    glfwGetFramebufferSize(currentWindow, &currentBufferWidth, &currentBufferHeight);
 }
 
 void Window::ResetBuffers()

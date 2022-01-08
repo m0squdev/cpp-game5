@@ -26,9 +26,10 @@ void loop()
     // key and mouse listener
     if (Listener::GetKeyPress(KEY_ESCAPE))
         Window::ExitLoop();
-    else if (Listener::GetKeyPress(KEY_F11))
+    else if (Listener::GetKeyPress(KEY_F11, true))
     {
         fullscreen = !fullscreen;
+        info(fullscreen);
         Window::SetFullscreen(fullscreen);
     }
     Listener::FirstPersonListener();

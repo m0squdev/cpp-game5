@@ -134,7 +134,7 @@ class Listener
 
         static void Create(GLFWwindow* window);
 
-        static bool GetKeyPress(int key);
+        static bool GetKeyPress(int key, bool pressedOnce = false);
 
         static GLfloat GetMouseX();
         static GLfloat GetMouseY();
@@ -144,7 +144,8 @@ class Listener
         static void FirstPersonListener();
     
     private:
-        static bool keys[KEY_LAST - KEY_SPACE];
+        static bool keys[KEY_LAST - KEY_SPACE], keyRetrieved[KEY_LAST - KEY_SPACE];
+        static int lastPressedOnceKey;
         static bool mouseMoved;
         static float mouseX, mouseY, mouseXMovement, mouseYMovement;
 

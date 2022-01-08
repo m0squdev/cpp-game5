@@ -1,14 +1,16 @@
 #include "listener.h"
 
-bool Listener::keys[];
+bool Listener::keys[], Listener::keyRetrieved[];
+int Listener::lastPressedOnceKey;
 bool Listener::mouseMoved = false;
 float Listener::mouseX, Listener::mouseY, Listener::mouseXMovement, Listener::mouseYMovement;
 
 void Listener::Init()
 {
-    for (int i = KEY_SPACE; i < KEY_LAST; i++)
+    for (int i = 0; i < KEY_LAST - KEY_SPACE; i++)
     {
         keys[i] = false;
+        keyRetrieved[i] = false;
     }
 }
 
@@ -18,10 +20,30 @@ void Listener::Create(GLFWwindow* window)
     glfwSetCursorPosCallback(window, Listener::MouseListener);
 }
 
-bool Listener::GetKeyPress(int key)
+bool Listener::GetKeyPress(int key, bool pressedOnce)
 {
     if (key >= KEY_SPACE && key <= KEY_MENU)
-        return keys[key - KEY_SPACE];
+    {
+        int _key = key - KEY_SPACE;
+        if (pressedOnce)
+        {
+            if (keys[_key])
+            {
+                bool _keyRetrieved = keyRetrieved[_key];
+                keyRetrieved[_key] = true;
+                return !_keyRetrieved;
+            }
+            else
+            {
+                keyRetrieved[_key] = false;
+                return keys[_key];
+            }
+        }
+        else
+        {
+            return keys[_key];
+        }
+    }
     else
         ThrowErr::UnknownKey("Window::GetKeyPress");
 }

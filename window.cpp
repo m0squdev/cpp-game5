@@ -46,7 +46,14 @@ void Window::Delete()
         glfwTerminate();
     }
     else
-        ThrowErr::UndefinedWindow("Window::Update");
+        ThrowErr::UndefinedWindow("Window::Delete");
+}
+
+void Window::Bind(GLFWwindow* window)
+{
+    currentWindow = window;
+    Window::UpdateBufferSize();
+    glfwMakeContextCurrent(currentWindow);
 }
 
 int Window::GetBufferWidth()
@@ -75,21 +82,14 @@ void Window::SetBufferHeight(int value)
     currentBufferHeight = value;
 }
 
-void Window::Bind(GLFWwindow* window)
-{
-    currentWindow = window;
-    Window::UpdateBufferSize();
-    glfwMakeContextCurrent(currentWindow);
-}
-
 void Window::SetViewport(GLint xStart, GLint xLength, GLint yStart, GLint yLength)
 {
     glViewport(xStart, yStart, xLength, yLength);
 }
 
-void Window::SetFullscreen(bool fullscreen)
+void Window::SetFullscreen(bool value)
 {
-    if (fullscreen)
+    if (value)
     {
         lastWindowedBufferWidth = currentBufferWidth;
         lastWindowedBufferHeight = currentBufferHeight;
@@ -102,15 +102,20 @@ void Window::SetFullscreen(bool fullscreen)
         currentBufferWidth = lastWindowedBufferWidth;
         currentBufferHeight = lastWindowedBufferHeight;
     }
-    glfwSetWindowMonitor(currentWindow, fullscreen ? glfwGetPrimaryMonitor() : NULL, 0, 0, currentBufferWidth, currentBufferHeight, GLFW_DONT_CARE);
+    glfwSetWindowMonitor(currentWindow, value ? glfwGetPrimaryMonitor() : NULL, 0, 0, currentBufferWidth, currentBufferHeight, GLFW_DONT_CARE);
     Window::SetViewport();
 }
 
-void Window::SetLoop(void (*func)())
+void Window::SetCursor(bool value)
+{
+    glfwSetInputMode(currentWindow, GLFW_CURSOR, value ? GLFW_CURSOR_NORMAL : GLFW_CURSOR_DISABLED);
+}
+
+void Window::RunLoop(void (*func)())
 {
     while (!glfwWindowShouldClose(currentWindow))
     {
-        Window::ResetBuffers();
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
         Camera::Update(deltaTime);
         func();
         Window::Update();
@@ -125,24 +130,14 @@ void Window::ExitLoop()
         ThrowErr::UndefinedWindow("Window::SetShouldClose");
 }
 
-void Window::SetBgColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
+void Window::SetBgColor(GLfloat r, GLfloat g, GLfloat b)
 {
-    glClearColor(r, g, b, a);
+    glClearColor(r, g, b, 1.f);
 }
 
 void Window::Enable3D()
 {
     glEnable(GL_DEPTH_TEST);
-}
-
-void Window::EnableCursor()
-{
-    glfwSetInputMode(currentWindow, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
-}
-
-void Window::DisableCursor()
-{
-    glfwSetInputMode(currentWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 }
 
 float Window::GetDeltaTime()
@@ -153,11 +148,6 @@ float Window::GetDeltaTime()
 void Window::UpdateBufferSize()
 {
     glfwGetFramebufferSize(currentWindow, &currentBufferWidth, &currentBufferHeight);
-}
-
-void Window::ResetBuffers()
-{
-    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
 
 void Window::Update()

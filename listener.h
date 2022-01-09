@@ -129,26 +129,27 @@
 
 class Listener
 {
-    public:
-        static void Init();
+public:
+    static void Init();
 
-        static void Create(GLFWwindow* window);
+    static void Create(GLFWwindow* window);
 
-        static bool GetKeyPress(int key, bool pressedOnce = false);
+    static bool GetKeyDown(int key);
+    static bool GetKeyKeptDown(int key);
 
-        static GLfloat GetMouseX();
-        static GLfloat GetMouseY();
-        static GLfloat GetMouseXMovement();
-        static GLfloat GetMouseYMovement();
+    static GLfloat GetMouseX();
+    static GLfloat GetMouseY();
+    static GLfloat GetMouseXMovement();
+    static GLfloat GetMouseYMovement();
 
-        static void FirstPersonListener();
-    
-    private:
-        static bool keys[KEY_LAST - KEY_SPACE], keyRetrieved[KEY_LAST - KEY_SPACE];
-        static int lastPressedOnceKey;
-        static bool mouseMoved;
-        static float mouseX, mouseY, mouseXMovement, mouseYMovement;
+    static void FirstPersonListener();
 
-        static void KeyListener(GLFWwindow* window, int key, int code, int action, int mode);
-        static void MouseListener(GLFWwindow* window, double xPos, double yPos);
+private:
+    static bool keys[KEY_LAST - KEY_SPACE], keyRetrieved[KEY_LAST - KEY_SPACE];
+    static int lastPressedOnceKey;
+    static bool mouseMoved;
+    static float mouseX, mouseY, mouseXMovement, mouseYMovement;
+
+    static void KeyListener(GLFWwindow* window, int key, int code, int action, int mode);
+    static void MouseListener(GLFWwindow* window, double xPos, double yPos);
 };

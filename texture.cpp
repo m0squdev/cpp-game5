@@ -64,7 +64,7 @@ void Texture::Unbind()
     glBindTexture(GL_TEXTURE_2D, 0);
 }
 
-void Texture::SetUniform(GLuint texture)
+void Texture::Set(GLuint texture)
 {
     glActiveTexture(GL_TEXTURE0);
     Texture::Bind(texture);

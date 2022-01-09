@@ -5,21 +5,21 @@
 
 class Texture
 {
-    public:
-        static void Init();
+public:
+    static void Init();
 
-        static GLuint Create(char* path);
-        static void Delete(GLuint texture = currentTexture);
+    static GLuint Create(char* path);
+    static void Delete(GLuint texture = currentTexture);
 
-        static int GetWidth();
-        static int GetHeight();
+    static int GetWidth();
+    static int GetHeight();
 
-        static void Bind(GLuint texture = currentTexture);
-        static void Unbind();
+    static void Bind(GLuint texture = currentTexture);
+    static void Unbind();
 
-        static void SetUniform(GLuint texture = currentTexture);
-    
-    private:
-        static GLuint currentTexture;
-        static int currentWidth, currentHeight, currentBitDepth;
+    static void Set(GLuint texture = currentTexture);
+
+private:
+    static GLuint currentTexture;
+    static int currentWidth, currentHeight, currentBitDepth;
 };

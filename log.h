@@ -21,18 +21,18 @@ void err(const float n, void (*func)(), bool endl = true, bool intro = true);
 
 class ThrowErr
 {
-    private:
-        static void Thrower(const char* type, const char* func, const char* text);
-    public:
-        // shader.cpp
-        static void UnknownShaderType(const char* func);
-        static void UnknownShaderStatus(const char* func);
-        // program.cpp
-        static void UnknownProgStatus(const char* func);
-        static void NullMatAxes(const char* func);
-        // texture.cpp
-        static void UnknownTextureSlot(const char* func);
-        // window.cpp
-        static void UnknownKey(const char* func);
-        static void UndefinedWindow(const char* func);
+private:
+    static void Thrower(const char* type, const char* func, const char* text);
+public:
+    // shader.cpp
+    static void UnknownShaderType(const char* func);
+    static void UnknownShaderStatus(const char* func);
+    // program.cpp
+    static void UnknownProgStatus(const char* func);
+    static void NullMatAxes(const char* func);
+    // texture.cpp
+    static void UnknownTextureSlot(const char* func);
+    // window.cpp
+    static void UnknownKey(const char* func);
+    static void UndefinedWindow(const char* func);
 };

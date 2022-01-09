@@ -20,27 +20,20 @@ void Listener::Create(GLFWwindow* window)
     glfwSetCursorPosCallback(window, Listener::MouseListener);
 }
 
-bool Listener::GetKeyPress(int key, bool pressedOnce)
+bool Listener::GetKeyDown(int key)
 {
     if (key >= KEY_SPACE && key <= KEY_MENU)
     {
         int _key = key - KEY_SPACE;
-        if (pressedOnce)
+        if (keys[_key])
         {
-            if (keys[_key])
-            {
-                bool _keyRetrieved = keyRetrieved[_key];
-                keyRetrieved[_key] = true;
-                return !_keyRetrieved;
-            }
-            else
-            {
-                keyRetrieved[_key] = false;
-                return keys[_key];
-            }
+            bool _keyRetrieved = keyRetrieved[_key];
+            keyRetrieved[_key] = true;
+            return !_keyRetrieved;
         }
         else
         {
+            keyRetrieved[_key] = false;
             return keys[_key];
         }
     }
@@ -48,19 +41,25 @@ bool Listener::GetKeyPress(int key, bool pressedOnce)
         ThrowErr::UnknownKey("Window::GetKeyPress");
 }
 
+bool Listener::GetKeyKeptDown(int key)
+{
+    int _key = key - KEY_SPACE;
+    return keys[_key];
+}
+
 void Listener::FirstPersonListener()
 {
-    if (Listener::GetKeyPress(KEY_A))
+    if (Listener::GetKeyKeptDown(KEY_A))
         Camera::GoLeft();
-    if (Listener::GetKeyPress(KEY_D))
+    if (Listener::GetKeyKeptDown(KEY_D))
         Camera::GoRight();
-    if (Listener::GetKeyPress(KEY_LEFT_SHIFT))
+    if (Listener::GetKeyKeptDown(KEY_LEFT_SHIFT))
         Camera::GoDown();
-    if (Listener::GetKeyPress(KEY_SPACE))
+    if (Listener::GetKeyKeptDown(KEY_SPACE))
         Camera::GoUp();
-    if (Listener::GetKeyPress(KEY_S))
+    if (Listener::GetKeyKeptDown(KEY_S))
         Camera::GoBackward();
-    if (Listener::GetKeyPress(KEY_W))
+    if (Listener::GetKeyKeptDown(KEY_W))
         Camera::GoForward();
     float mouseXMovement = Listener::GetMouseXMovement();
     float mouseYMovement = Listener::GetMouseYMovement();
@@ -102,10 +101,15 @@ void Listener::KeyListener(GLFWwindow* window, int key, int code, int action, in
     }*/
     if (key >= KEY_SPACE && key <= KEY_MENU)
     {
-        if (action == GLFW_PRESS)
+        switch (action)
+        {
+        case GLFW_PRESS:
             keys[key - KEY_SPACE] = true;
-        else if (action == GLFW_RELEASE)
+            break;
+        case GLFW_RELEASE:
             keys[key - KEY_SPACE] = false;
+            break;
+        }    
     }
     else
         ThrowErr::UnknownKey("Window::KeyListener");

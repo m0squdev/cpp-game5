@@ -1,6 +1,5 @@
 #include "window.h"
 
-bool fullscreen = false;
 GLfloat vertices[] = {
  // Vertex pos    // Tex coord // Normal
     -1.f, -1.f, 0.f, 0.f, 0.f,    0.f, 0.f, 0.f,
@@ -15,21 +14,23 @@ GLuint indices[] = {
     0, 1, 2
 };
 GLuint brickTexture, southAfricaTexture;
-float light = 0.f;
+bool cursor, fullscreen;
+float light;
 
 void loop()
 {
-    // Set the background color
-    Window::SetBgColor(0.f, 0.f, 0.f);
-    // Clear the color and the depth buffers
-    //Window::ResetBuffers();
-    // key and mouse listener
-    if (Listener::GetKeyPress(KEY_ESCAPE))
+    // Listen for keypresses and mouse movements
+    if (Listener::GetKeyDown(KEY_ESCAPE))
         Window::ExitLoop();
-    else if (Listener::GetKeyPress(KEY_F11, true))
+    else if (Listener::GetKeyDown(KEY_F9))
+    {
+        cursor = !cursor;
+        info(cursor);
+        Window::SetCursor(cursor);
+    }
+    else if (Listener::GetKeyDown(KEY_F11))
     {
         fullscreen = !fullscreen;
-        info(fullscreen);
         Window::SetFullscreen(fullscreen);
     }
     Listener::FirstPersonListener();
@@ -41,16 +42,17 @@ void loop()
     {
         light += .01f;
         Light::SetAmbient(light);
+        Light::SetDiffuse(2.f, -1.f, -2.f, light);
     }
     for (int y = -1; y <= 0; y++)
     {
         switch (y)
         {
         case -1:
-            Texture::SetUniform(brickTexture);
+            Texture::Set(brickTexture);
             break;
         case 0:
-            Texture::SetUniform(southAfricaTexture);
+            Texture::Set(southAfricaTexture);
             break;
         }
         Prog::TranslateModel(0.f, y, 0.f);
@@ -78,8 +80,8 @@ int main()
         err("Cannot initialise GLEW", nullptr);
     // Set some window's stuff
     Window::SetViewport();
+    Window::SetCursor(cursor);
     Window::Enable3D();
-    Window::DisableCursor();
     // Create the camera
     Camera::Create(1.f, 1.f);
     // Create the shape
@@ -100,7 +102,7 @@ int main()
     Light::SetDiffuse(2.f, -1.f, -2.f, 1.f);
     Mesh::UnbindWithProg();
     // Main loop
-    Window::SetLoop(&loop);
+    Window::RunLoop(&loop);
     // Delete anything!!!1!1!1!11
     Mesh::DeleteWithProg();
     Window::Delete();

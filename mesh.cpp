@@ -17,10 +17,12 @@ GLuint Mesh::Create(GLuint* indices, int indicesSize, GLfloat* vertices, int ver
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indicesSize, indices, GL_STATIC_DRAW);
     Mesh::Bind(NULL, currentVbo, NULL);
     glBufferData(GL_ARRAY_BUFFER, verticesSize, vertices, GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 5, 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, 0);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 5, (void*)(sizeof(vertices[0]) * 3));
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, (void*)(sizeof(vertices[0]) * 3));
     glEnableVertexAttribArray(1);
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, sizeof(vertices[0]) * 8, (void*)(sizeof(vertices[0]) * 5));
+    glEnableVertexAttribArray(2);
     return currentVao;
 }
 
@@ -109,6 +111,40 @@ GLuint Mesh::GetCurrentVbo()
 GLuint Mesh::GetCurrentIbo()
 {
     return currentIbo;
+}
+
+void Mesh::CalcNormals(GLuint* indices, int indicesSize, GLfloat* vertices, int verticesSize, int vertexLength, int normalOffset)
+{
+    for (int n = 0; n < indicesSize; n += 3)
+    {
+        GLuint index0 = indices[n] * vertexLength;
+        GLuint index1 = indices[n + 1] * vertexLength;
+        GLuint index2 = indices[n + 2] * vertexLength;
+        glm::vec3 vec1(vertices[index1] - vertices[index0], vertices[index1 + 1] - vertices[index0 + 1], vertices[index1 + 2] - vertices[index0 + 2]);
+        glm::vec3 vec2(vertices[index2] - vertices[index0], vertices[index2 + 1] - vertices[index0 + 1], vertices[index2 + 2] - vertices[index0 + 2]);
+        glm::vec3 normal = glm::normalize(glm::cross(vec1, vec2));
+        index0 += normalOffset;
+        index1 += normalOffset;
+        index2 += normalOffset;
+        vertices[index0] += normal.x;
+        vertices[index0 + 1] += normal.y;
+        vertices[index0 + 2] += normal.z;
+        vertices[index1] += normal.x;
+        vertices[index1 + 1] += normal.y;
+        vertices[index1 + 2] += normal.z;
+        vertices[index2] += normal.x;
+        vertices[index2 + 1] += normal.y;
+        vertices[index2 + 2] += normal.z;
+    }
+    for (int n = 0; n < verticesSize / vertexLength; n++)
+    {
+        GLuint _normalOffset = n * vertexLength + normalOffset;
+        glm::vec3 vec = glm::normalize(glm::vec3(vertices[normalOffset], vertices[normalOffset + 1], vertices[normalOffset + 2]));
+        vertices[normalOffset] = vec.x;
+        vertices[normalOffset + 1] = vec.y;
+        vertices[normalOffset + 2] = vec.z;
+
+    }
 }
 
 void Mesh::Render(GLint size, GLint offset)

@@ -20,6 +20,8 @@ class Mesh
         static GLuint GetCurrentVbo();
         static GLuint GetCurrentIbo();
 
+        static void CalcNormals(GLuint* indices, int indicesSize, GLfloat* vertices, int verticesSize, int vertexLength, int normalOffset);
+
         static void Render(GLint size, GLint offset = 0);
 
     private:

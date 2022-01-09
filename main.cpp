@@ -2,11 +2,11 @@
 
 bool fullscreen = false;
 GLfloat vertices[] = {
-    // Vertex pos    // Texture coordinate
-    -1.f, -1.f, 0.f, 0.f, 0.f,
-     0.f, -1.f, 1.f, .5f, 0.f,
-     1.f, -1.f, 0.f, 1.f, 0.f,
-     0.f,  1.f, 0.f, .5f, 1.f
+ // Vertex pos    // Tex coord // Normal
+    -1.f, -1.f, 0.f, 0.f, 0.f,    0.f, 0.f, 0.f,
+     0.f, -1.f, 1.f, .5f, 0.f,    0.f, 0.f, 0.f,
+     1.f, -1.f, 0.f, 1.f, 0.f,    0.f, 0.f, 0.f,
+     0.f,  1.f, 0.f, .5f, 1.f,    0.f, 0.f, 0.f
 };
 GLuint indices[] = {
     0, 3, 1,
@@ -83,6 +83,7 @@ int main()
     // Create the camera
     Camera::Create(1.f, 1.f);
     // Create the shape
+    Mesh::CalcNormals(indices, 12, vertices, 32, 8, 5);
     Mesh::CreateWithProgFromShaderFiles(indices, sizeof(indices), vertices, sizeof(vertices), "res/shaders/Vertex.glsl", "res/shaders/Fragment.glsl");
     info("Prog:", false);
     info(Prog::GetCurrentProg());
@@ -95,7 +96,8 @@ int main()
     Prog::SetProjection(bufferWidth, bufferHeight, .1f, 100.f);
     brickTexture = Texture::Create("res/textures/bricks.png");
     southAfricaTexture = Texture::Create("res/textures/southafrica.jpg");
-    Light::SetAmbient(light, 1.f, 1.f, 1.f);
+    Light::SetAmbient(light);
+    Light::SetDiffuse(2.f, -1.f, -2.f, 1.f);
     Mesh::UnbindWithProg();
     // Main loop
     Window::SetLoop(&loop);

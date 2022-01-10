@@ -1,11 +1,11 @@
 #include "window.h"
 
 GLfloat vertices[] = {
- // Vertex pos    // Tex coord // Normal
-    -1.f, -1.f, 0.f, 0.f, 0.f,    0.f, 0.f, 0.f,
-     0.f, -1.f, 1.f, .5f, 0.f,    0.f, 0.f, 0.f,
-     1.f, -1.f, 0.f, 1.f, 0.f,    0.f, 0.f, 0.f,
-     0.f,  1.f, 0.f, .5f, 1.f,    0.f, 0.f, 0.f
+ // Vertex pos     // Tex coord // Normal
+    -1.f, -1.f, -.6f, 0.f, 0.f,    0.f, 0.f, 0.f,
+     0.f, -1.f,  1.f, .5f, 0.f,    0.f, 0.f, 0.f,
+     1.f, -1.f, -.6f, 1.f, 0.f,    0.f, 0.f, 0.f,
+     0.f,  1.f,  0.f, .5f, 1.f,    0.f, 0.f, 0.f
 };
 GLuint indices[] = {
     0, 3, 1,
@@ -37,26 +37,28 @@ void loop()
     // Bind
     Mesh::BindWithProg();
     // Render
+    Prog::UpdatePos();
     Prog::UpdateView();
     if (light < 1.f)
     {
         light += .01f;
-        Light::SetAmbient(light);
-        Light::SetDiffuse(2.f, -1.f, -2.f, light);
+        //Light::SetAmbient(light);
+        //Light::SetDiffuse(2.f, -1.f, -2.f, light);
     }
-    for (int y = -1; y <= 0; y++)
+    for (int y = 0; y <= 4; y += 4)
     {
         switch (y)
         {
-        case -1:
+        case 0:
+            Material::Set(32.f);
             Texture::Set(brickTexture);
             break;
-        case 0:
+        case 4:
+            Material::Set(4.f, .3f);
             Texture::Set(southAfricaTexture);
             break;
         }
         Prog::TranslateModel(0.f, y, 0.f);
-        Prog::ScaleModel(.4f, .4f, 1.f);
         Prog::UpdateModel();
         Mesh::Render(sizeof(indices));
     }
@@ -70,7 +72,7 @@ int main()
     if(!glfwInit())
         err("Cannot initialise GLFW", nullptr);
     // Create the window
-    Window::Create("Hello World", 800, 600);
+    Window::Create("Hello World", 1366, 768);
     int bufferWidth = Window::GetBufferWidth();
     int bufferHeight = Window::GetBufferHeight();
     Window::InitLib();
@@ -98,8 +100,8 @@ int main()
     Prog::SetProjection(bufferWidth, bufferHeight, .1f, 100.f);
     brickTexture = Texture::Create("res/textures/bricks.png");
     southAfricaTexture = Texture::Create("res/textures/southafrica.jpg");
-    Light::SetAmbient(light);
-    Light::SetDiffuse(2.f, -1.f, -2.f, 1.f);
+    Light::SetAmbient(.2f);
+    Light::SetDiffuse(2.f, -1.f, -2.f, .3f);
     Mesh::UnbindWithProg();
     // Main loop
     Window::RunLoop(&loop);

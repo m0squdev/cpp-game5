@@ -17,6 +17,11 @@ void Camera::Create(GLfloat startMovementSpeed, GLfloat startTurnSpeed, glm::vec
     //Camera::Update();
 }
 
+glm::vec3 Camera::GetPos()
+{
+    return pos;
+}
+
 GLfloat Camera::GetYaw()
 {
     return yaw;

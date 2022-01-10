@@ -177,3 +177,8 @@ void Prog::UpdateView()
 {
     Prog::SetUniform("viewMat", Camera::GetView());
 }
+
+void Prog::UpdatePos()
+{
+    Prog::SetUniform("cameraPos", Camera::GetPos());
+}

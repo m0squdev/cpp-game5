@@ -3,6 +3,7 @@
 #include "mesh.h"
 #include "texture.h"
 #include "light.h"
+#include "material.h"
 #include "listener.h"
 
 class Window

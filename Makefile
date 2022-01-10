@@ -28,7 +28,7 @@ obj-lib-stb-image: lib/stb_image/stb_image.cpp
 	gcc -c $(lib-stb-image-dir)/stb_image.cpp -o $(obj-dir)/stb_image.o
 #	gcc -c lib/stb_image/stb_image.cpp -o lib/stb_image/stb_image.o
 # make obj-game: converts all the game's .cpp files but main.cpp
-obj-game: log.cpp camera.cpp shader.cpp program.cpp mesh.cpp texture.cpp light.cpp listener.cpp window.cpp
+obj-game: log.cpp camera.cpp shader.cpp program.cpp mesh.cpp texture.cpp light.cpp material.cpp listener.cpp window.cpp
 	gcc -c log.cpp -o $(obj-dir)/log.o
 	gcc -c camera.cpp -o $(obj-dir)/camera.o
 	gcc -c shader.cpp -o $(obj-dir)/shader.o
@@ -36,6 +36,7 @@ obj-game: log.cpp camera.cpp shader.cpp program.cpp mesh.cpp texture.cpp light.c
 	gcc -c mesh.cpp -o $(obj-dir)/mesh.o
 	gcc -c texture.cpp -o $(obj-dir)/texture.o
 	gcc -c light.cpp -o $(obj-dir)/light.o
+	gcc -c material.cpp -o $(obj-dir)/material.o
 	gcc -c listener.cpp -o $(obj-dir)/listener.o
 	gcc -c window.cpp -o $(obj-dir)/window.o
 #	gcc -c camera.cpp log.cpp program.cpp shader.cpp texture.cpp mesh.cpp window.cpp

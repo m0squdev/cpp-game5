@@ -10,12 +10,11 @@ class Camera
 public:
     static void Create(GLfloat startMovementSpeed, GLfloat startTurnSpeed, glm::vec3 startPos = glm::vec3(0.f, 0.f, 0.f), glm::vec3 startUp = glm::vec3(0.f, 1.f, 0.f), GLfloat startYaw = 90.f, GLfloat startPitch = 0.f);
 
+    static glm::vec3 GetPos();
     static GLfloat GetYaw();
     static void SetYaw(GLfloat value);
-
     static GLfloat GetPitch();
     static void SetPitch(GLfloat value);
-    
     static GLfloat GetTurnSpeed();
     static glm::mat4 GetView();
 

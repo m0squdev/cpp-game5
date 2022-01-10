@@ -34,6 +34,8 @@ public:
 
     static void UpdateView();
 
+    static void UpdatePos();
+
 private:
     static GLuint currentProg;
     static GLchar* currentUniformName;

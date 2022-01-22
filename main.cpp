@@ -37,6 +37,12 @@ void loop()
     // Bind
     Mesh::BindWithProg();
     // Render
+    for (int n = 0; n < MAX_POINT_LIGHTS; n++)
+    {
+        //char locationBuffer[100] = { '\0' };
+        //snprintf(locationBuffer, sizeof(locationBuffer), "pointLights[%d].color", n);
+        Prog::BindUniform(strcat(strcat("pointLights[", (char*)n), "].color"));
+    }
     Prog::UpdatePos();
     Prog::UpdateView();
     if (light < 1.f)

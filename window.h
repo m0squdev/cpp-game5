@@ -9,8 +9,8 @@
 class Window
 {
 public:
-    static void Init(int vMajor = 3, int vMinor = 3, int profile = GLFW_OPENGL_CORE_PROFILE, bool forwardCompatible = GLFW_TRUE, int fps = 60);
-    static void InitLib(int vMajor = 3, int vMinor = 3, int profile = GLFW_OPENGL_CORE_PROFILE, bool forwardCompatible = GLFW_TRUE, int fps = 60);
+    static void Init();
+    static void InitLib();
 
     static GLFWwindow* Create(char* title, int width, int height, bool fullscreen = false);
     static void Delete();

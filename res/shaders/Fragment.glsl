@@ -1,12 +1,26 @@
 #version 330
 
+const int maxPointLights = 3;
+
+struct Light
+{
+    vec3 ambientColor;
+    float ambientIntensity;
+    vec3 diffuseColor;
+    float diffuseIntensity;
+};
+
 struct DirectionalLight
 {
-    float ambientIntensity;
-    vec3 ambientColor;
-    vec3 diffuseDirection;
-    float diffuseIntensity;
-    vec3 diffuseColor;
+    Light base;
+    vec3 direction;
+};
+
+struct PointLights
+{
+    Light base;
+    float constant, linear, exponent;
+    vec3 pos, color;
 };
 
 struct Material
@@ -24,20 +38,22 @@ in vec3 vertexPos;
 uniform sampler2D textureSlot;
 uniform DirectionalLight directionalLight;
 uniform Material material;
+uniform PointLights pointLights[maxPointLights];
+uniform int pointLightsCount;
 uniform vec3 cameraPos;
 
 out vec4 color;
 
-void main()
+vec4 CalcLightFromDirection(Light light, vec3 diffuseDirection)
 {
-    vec4 ambientLight = vec4(directionalLight.ambientColor, 1.f) * vec4(vec3(directionalLight.ambientIntensity), 1.f);
-    float diffuseFactor = max(dot(normalize(vertexNormal), normalize(directionalLight.diffuseDirection)), 0.f);
-    vec4 diffuseLight = vec4(directionalLight.diffuseColor, 1.f) * directionalLight.diffuseIntensity * diffuseFactor;
+    vec4 ambientLight = vec4(light.diffuseColor, 1.f) * vec4(vec3(light.ambientIntensity), 1.f);
+    float diffuseFactor = max(dot(normalize(vertexNormal), normalize(diffuseDirection)), 0.f);
+    vec4 diffuseLight = vec4(diffuseColor, 1.f) * light.diffuseIntensity * diffuseFactor;
     vec4 specularLight = vec4(0, 0, 0, 0);
     if (diffuseFactor > 0.f)
     {
         vec3 distance = normalize(cameraPos - vertexPos);
-        vec3 reflection = normalize(reflect(directionalLight.diffuseDirection, normalize(vertexNormal)));
+        vec3 reflection = normalize(reflect(diffuseDirection, normalize(vertexNormal)));
         float specularFactor = dot(distance, reflection);
         if (specularFactor > 0.f)
         {
@@ -45,5 +61,30 @@ void main()
             specularLight = vec4(material.specularColor * material.specularIntensity * specularFactor, 1.f);
         }
     }
-    color = texture(textureSlot, vertexTextureCoord) * (ambientLight + diffuseLight + specularLight);
+    return (ambientLight + diffuseLight + specularLight);
+}
+
+vec4 CalcDirectionalLight()
+{
+    return CalcLightFromDirection(directionalLight.base, directionalLight.diffuseDirection);
+}
+
+vec4 CalcPointLights()
+{
+    vec4 totalColor = vec4(0, 0, 0, 0);
+    for (int n = 0; n < pointLightsCount; n++)
+    {
+        vec3 direction = vertexPos - pointLights[n].pos;
+        float distance = length(direction);
+        direction = normalize(direction);
+        vec4 color = CalcLightFromDirection(pointLights[n].base, direction);
+    }
+}
+
+void main()
+{
+    vec4 finalDirectionalLight = CalcDirectionalLight();
+    vec4 finalPointLights = CalcPointLights();
+    vec4 finalLights = finalDirectionalLight + finalPointLights;
+    color = texture(textureSlot, vertexTextureCoord) * finalLights;
 }

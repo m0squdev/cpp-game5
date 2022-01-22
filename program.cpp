@@ -98,7 +98,7 @@ GLchar* Prog::GetErrLog(GLuint prog, bool printWarn)
     return infoLog;
 }
 
-void Prog::BindUniform(GLchar* name)
+GLint Prog::BindUniform(GLchar* name)
 {
     if (name != currentUniformName);
     {
@@ -110,6 +110,7 @@ void Prog::BindUniform(GLchar* name)
             warn(currentUniformName);
         }
     }
+    return currentUniformLocation;
 }
 
 void Prog::SetUniform(GLchar* name, GLint value)

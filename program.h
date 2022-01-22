@@ -19,7 +19,7 @@ public:
     static GLint GetErrCode(GLuint prog, GLint status, bool printWarn = false);
     static GLchar* GetErrLog(GLuint prog, bool printWarn = false);
 
-    static void BindUniform(GLchar* name);
+    static GLint BindUniform(GLchar* name);
     static void SetUniform(GLchar* name, GLint value);
     static void SetUniform(GLchar* name, GLfloat value);
     static void SetUniform(GLchar* name, glm::vec3 value);

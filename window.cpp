@@ -8,19 +8,20 @@ int Window::lastWindowedBufferHeight = NULL;
 float Window::deltaTime = 0.f;
 float Window::lastTime = 0.f;
 
-void Window::Init(int vMajor, int vMinor, int profile, bool forwardCompatible, int fps)
+void Window::Init()
 {
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, vMajor);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, vMinor);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, profile);
-    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, forwardCompatible);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);
     glfwWindowHint(GLFW_SCALE_TO_MONITOR, GLFW_TRUE);
-    glfwWindowHint(GLFW_REFRESH_RATE, fps);
+    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+    glfwWindowHint(GLFW_REFRESH_RATE, 60);
 }
 
-void Window::InitLib(int vMajor, int vMinor, int profile, bool forwardCompatible, int fps)
+void Window::InitLib()
 {
-    Window::Init(vMajor, vMinor, profile, forwardCompatible, fps);
+    Window::Init();
     Listener::Init();
     Texture::Init();
 }

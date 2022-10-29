@@ -14,7 +14,8 @@ GLuint indices[] = {
     0, 1, 2
 };
 GLuint brickTexture, southAfricaTexture;
-bool cursor, fullscreen;
+bool cursor = true;
+bool fullscreen;
 float light;
 
 void loop()
@@ -37,12 +38,12 @@ void loop()
     // Bind
     Mesh::BindWithProg();
     // Render
-    for (int n = 0; n < MAX_POINT_LIGHTS; n++)
+    /*for (int n = 0; n < MAX_POINT_LIGHTS; n++)
     {
         //char locationBuffer[100] = { '\0' };
         //snprintf(locationBuffer, sizeof(locationBuffer), "pointLights[%d].color", n);
         Prog::BindUniform(strcat(strcat("pointLights[", (char*)n), "].color"));
-    }
+    }*/
     Prog::UpdatePos();
     Prog::UpdateView();
     if (light < 1.f)
@@ -88,7 +89,6 @@ int main()
         err("Cannot initialise GLEW", nullptr);
     // Set some window's stuff
     Window::SetViewport();
-    Window::SetCursor(cursor);
     Window::Enable3D();
     // Create the camera
     Camera::Create(1.f, 1.f);
@@ -108,6 +108,8 @@ int main()
     southAfricaTexture = Texture::Create("res/textures/southafrica.jpg");
     Light::SetAmbient(.2f);
     Light::SetDiffuse(2.f, -1.f, -2.f, .3f);
+    Light::CreatePoint(.3f, .2f, .1f, 0.f, 2.f, 0.f, 0.f, 1.f, 0.f);
+    Light::SetPoints();
     Mesh::UnbindWithProg();
     // Main loop
     Window::RunLoop(&loop);

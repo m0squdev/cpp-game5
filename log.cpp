@@ -2,6 +2,18 @@
 
 bool previousEndl = true;
 
+void catStr(char* result, const char* str1, const char* str2)
+{
+//    char result[128] = "";
+    result[0] = '\0';
+    info(str1);
+    strcat(result, (const char*)str1);
+    info(str2);
+    strcat(result, (const char*)str2);
+
+    //return result;
+}
+
 std::string getCurrentTime()
 {
     auto now = std::chrono::system_clock::now();

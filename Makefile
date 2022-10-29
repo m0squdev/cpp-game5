@@ -1,4 +1,22 @@
-### The relative path for all of the commands executed in this makefile is the WORKING DIRECTORY ###
+### The relative path for all of the commands executed in this makefile is the WORKING DIRECTORY                     ###
+### If you're on Linux, you may need to run the following command in order for the shaders to be loaded successfully ###
+###    export MESA_GL_VERSION_OVERRIDE=3.3                                                                           ###
+### Also, on Linux Debian and derived distros you can run                                                            ###
+###    make install                                                                                                  ###
+### to install GLFW and GLEW by using apt                                                                            ###
+
+### Get started by calling the following commands ###
+#   $ git init
+#   $ make config email="user@website.com" name="user"
+#   $ git add
+#   $ git commit -m "Commit message"
+#   $ make connect url="https://github.com/user/repo.git"
+#   $ make push
+
+### Useful Git commands ###
+#   $ git add    | Add files to commit
+#   $ git init   | Make the directory a Git repository
+#   $ git status | Show the committed, modified and untracked files in the directory
 
 # You can change to whatever directory or files the following global values
 lib-dir = lib
@@ -9,6 +27,11 @@ out-file = out
 
 # make: executes functions build, run and clear
 output: obj build run
+
+# make install: [ONLY FOR LINUX DEBIAN AND DERIVED DISTROS] installs the GLFW and GLEW libraries
+install:
+	sudo apt install libglfw3-dev
+	sudo apt install libglew-dev
 
 # make init: creates the directories where the .o files are stored
 init:
@@ -64,27 +87,25 @@ clean-out:
 # make clean: removes the files created by the functions build_<cpp file>, obj and build
 clean: clean-obj clean-out
 
-# make git-init: makes the directory a git repository
-git-init:
-	git init
-# make git-connect url="https://github.com/user/repo.git": connects the git repository to the GitHub one
-git-connect:
+# make config email="user@website.com" name="user": configures your Git profile. This is required for you to commit your work
+config:
+	git config --global user.email "$(email)"
+	git config --global user.name "$(name)"
+# make connect url="https://github.com/user/repo.git"           : connects the external repository to the Git one
+#              url="https://user:token@github.com/user/repo.git": this also sets the user and the token to use when updating the external repository
+connect:
 	git remote add origin $(url)
 	git branch -M master
-# make git-disconnect: disconnects GitHub from the git repository
-git-disconnect:
+# make disconnect: disconnects the external repository from the Git repository
+disconnect:
 	git remote rm origin
-# make git-status: shows the files that are syncronised with the git repository, the ones that had been modified and the untracked ones
-git-status:
-	git status
-# make git-add file="code.cpp": adds files to the git repository
-git-add:
-	git add $(file)
-# make git-rm file="code.cpp": removes files from the git repository
-git-rm:
-	git rm $(file)
-# make git-commit msg="Commit\ message": updates the git and the GitHub repositories
-git-commit:
+# make update: updates modified files on the Git repository
+update:
 	git add -u
-	git commit -m $(msg)
+# make rm file="file.txt": removes a file from the Git repository
+rm:
+	git rm $(file) --cached
+
+# make push: updates the external repository
+push:
 	git push -u origin master

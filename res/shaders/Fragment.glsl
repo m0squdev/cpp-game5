@@ -46,9 +46,9 @@ out vec4 color;
 
 vec4 CalcLightFromDirection(Light light, vec3 diffuseDirection)
 {
-    vec4 ambientLight = vec4(light.diffuseColor, 1.f) * vec4(vec3(light.ambientIntensity), 1.f);
+    vec4 ambientLight = vec4(light.ambientColor, 1.f) * light.ambientIntensity;
     float diffuseFactor = max(dot(normalize(vertexNormal), normalize(diffuseDirection)), 0.f);
-    vec4 diffuseLight = vec4(diffuseColor, 1.f) * light.diffuseIntensity * diffuseFactor;
+    vec4 diffuseLight = vec4(light.diffuseColor * light.diffuseIntensity * diffuseFactor, 1.f);
     vec4 specularLight = vec4(0, 0, 0, 0);
     if (diffuseFactor > 0.f)
     {
@@ -66,7 +66,7 @@ vec4 CalcLightFromDirection(Light light, vec3 diffuseDirection)
 
 vec4 CalcDirectionalLight()
 {
-    return CalcLightFromDirection(directionalLight.base, directionalLight.diffuseDirection);
+    return CalcLightFromDirection(directionalLight.base, directionalLight.direction);
 }
 
 vec4 CalcPointLights()
@@ -78,7 +78,10 @@ vec4 CalcPointLights()
         float distance = length(direction);
         direction = normalize(direction);
         vec4 color = CalcLightFromDirection(pointLights[n].base, direction);
+        float attenuation = pointLights[n].exponent * distance * distance + pointLights[n].linear * distance + pointLights[n].constant;
+        totalColor += (color / attenuation);
     }
+    return totalColor;
 }
 
 void main()

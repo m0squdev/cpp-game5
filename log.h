@@ -1,9 +1,12 @@
 #pragma once
 
 #include <chrono>
+#include <cstring>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
+
+void catStr(char*, const char*, const char*);
 
 std::string getCurrentTime();
 

@@ -9,6 +9,10 @@
 ### Remember to initialize the output directory with                                                                 ###
 ###    make init                                                                                                     ###
 ### before compiling anything!                                                                                       ###
+### To compile just the library run                                                                                  ###
+###    make obj-engine                                                                                               ###
+### To compile also the example (main.cpp) run                                                                       ###
+###    make obj                                                                                                      ###
 
 # You can change to whatever directory or files the following global values
 lib-dir = lib
@@ -58,11 +62,13 @@ obj-game: log.cpp camera.cpp shader.cpp program.cpp mesh.cpp texture.cpp light.c
 	gcc -c listener.cpp -o $(obj-dir)/listener.o
 	gcc -c window.cpp -o $(obj-dir)/window.o
 #	gcc -c camera.cpp log.cpp program.cpp shader.cpp texture.cpp mesh.cpp window.cpp
+# make obj-engine: calls all the obj-* functions except obj-main
+obj-engine: obj-lib-soil obj-game
 # make obj-main: converts main.cpp to main.o
 obj-main: main.cpp
 	gcc -c main.cpp -o $(obj-dir)/main.o
 # make obj: calls all the obj-* functions
-obj: obj-lib-soil obj-game obj-main
+obj: obj-engine obj-main
 
 # make build: converts all the .cpp files to .o files and compiles them with all the modules included
 build:

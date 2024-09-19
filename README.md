@@ -44,6 +44,8 @@ This is a simple OpenGL-based game engine that provides basic functionality for 
 └── Makefile
 ```
 
+Notice: the soil and stb_image are stored in the repository. To install GLEW and GLFW follow the instructions under "Installation of Dependencies".
+
 ## Compilation
 
 This project uses a Makefile for compilation. Here are the main commands:

@@ -95,13 +95,9 @@ int main()
     // Create the shape
     Mesh::CalcNormals(indices, 12, vertices, 32, 8, 5);
     Mesh::CreateWithProgFromShaderFiles(indices, sizeof(indices), vertices, sizeof(vertices), "res/shaders/Vertex.glsl", "res/shaders/Fragment.glsl");
-    info("Prog:", false);
     info(Prog::GetCurrentProg());
-    info("Vao:", false);
     info(Mesh::GetCurrentVao());
-    info("Vbo:", false);
     info(Mesh::GetCurrentVbo());
-    info("Ibo:", false);
     info(Mesh::GetCurrentIbo());
     Prog::SetProjection(bufferWidth, bufferHeight, .1f, 100.f);
     brickTexture = Texture::Create("res/textures/bricks.png");

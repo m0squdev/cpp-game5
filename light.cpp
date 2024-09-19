@@ -33,7 +33,7 @@ void Light::SetDiffuse(GLfloat x, GLfloat y, GLfloat z, GLfloat intensity, GLflo
     Prog::SetUniform("directionalLight.base.diffuseColor", glm::vec3(currentAmbientR, currentAmbientG, currentAmbientB));
 }
 
-int Light::CreatePoint(GLfloat constant, GLfloat linear, GLfloat exponent, GLfloat x, GLfloat y, GLfloat z, GLfloat r, GLfloat g, GLfloat b)
+void Light::CreatePoint(GLfloat constant, GLfloat linear, GLfloat exponent, GLfloat x, GLfloat y, GLfloat z, GLfloat r, GLfloat g, GLfloat b)
 {
     currentPointConstant = constant;
     currentPointLinear = linear;

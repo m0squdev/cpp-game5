@@ -1,22 +1,14 @@
 ### The relative path for all of the commands executed in this makefile is the WORKING DIRECTORY                     ###
 ### If you're on Linux, you may need to run the following command in order for the shaders to be loaded successfully ###
 ###    export MESA_GL_VERSION_OVERRIDE=3.3                                                                           ###
-### Also, on Linux Debian and derived distros you can run                                                            ###
-###    make install                                                                                                  ###
-### to install GLFW and GLEW by using apt                                                                            ###
-
-### Get started by calling the following commands ###
-#   $ git init
-#   $ make config email="user@website.com" name="user"
-#   $ git add
-#   $ git commit -m "Commit message"
-#   $ make connect url="https://github.com/user/repo.git"
-#   $ make push
-
-### Useful Git commands ###
-#   $ git add    | Add files to commit
-#   $ git init   | Make the directory a Git repository
-#   $ git status | Show the committed, modified and untracked files in the directory
+### Also, if you have apt you can run                                                                                ###
+###    make apt-install                                                                                              ###
+### to install GLFW and GLEW by using apt or if you have pacman                                                      ###
+###    make pacman-install                                                                                           ###
+### to do the same                                                                                                   ###
+### Remember to initialize the output directory with                                                                 ###
+###    make init                                                                                                     ###
+### before compiling anything!                                                                                       ###
 
 # You can change to whatever directory or files the following global values
 lib-dir = lib
@@ -28,10 +20,13 @@ out-file = out
 # make: executes functions build, run and clear
 output: obj build run
 
-# make install: [ONLY FOR LINUX DEBIAN AND DERIVED DISTROS] installs the GLFW and GLEW libraries
-install:
-	sudo apt install libglfw3-dev
-	sudo apt install libglew-dev
+# make apt-install: [ONLY IF YOU HAVE APT] installs the GLFW and GLEW libraries
+apt-install:
+	sudo apt install libglfw3-dev libglew-dev
+
+# make pacman-install: [ONLY IF YOU HAVE PACMAN] installs the GLFW and GLEW libraries
+pacman-install:
+	sudo pacman -S glfw glew --needed
 
 # make init: creates the directories where the .o files are stored
 init:

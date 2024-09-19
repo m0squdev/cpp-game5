@@ -87,26 +87,3 @@ clean-out:
 	rm $(out-file)
 # make clean: removes the files created by the functions build_<cpp file>, obj and build
 clean: clean-obj clean-out
-
-# make config email="user@website.com" name="user": configures your Git profile. This is required for you to commit your work
-config:
-	git config --global user.email "$(email)"
-	git config --global user.name "$(name)"
-# make connect url="https://github.com/user/repo.git"           : connects the external repository to the Git one
-#              url="https://user:token@github.com/user/repo.git": this also sets the user and the token to use when updating the external repository
-connect:
-	git remote add origin $(url)
-	git branch -M master
-# make disconnect: disconnects the external repository from the Git repository
-disconnect:
-	git remote rm origin
-# make update: updates modified files on the Git repository
-update:
-	git add -u
-# make rm file="file.txt": removes a file from the Git repository
-rm:
-	git rm $(file) --cached
-
-# make push: updates the external repository
-push:
-	git push -u origin master
